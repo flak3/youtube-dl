@@ -631,6 +631,7 @@ from .ndr import (
     NJoyEmbedIE,
 )
 from .ndtv import NDTVIE
+from .neomagazin import NeoMagazinIE
 from .netzkino import NetzkinoIE
 from .nerdcubed import NerdCubedFeedIE
 from .neteasemusic import (
