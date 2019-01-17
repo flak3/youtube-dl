@@ -687,11 +687,7 @@ from .myvi import (
     MyviEmbedIE,
 )
 from .myvidster import MyVidsterIE
-from .nationalgeographic import (
-    NationalGeographicVideoIE,
-    NationalGeographicIE,
-    NationalGeographicEpisodeGuideIE,
-)
+from .nationalgeographic import NationalGeographicVideoIE
 from .naver import NaverIE
 from .nba import NBAIE
 from .nbc import (
@@ -833,6 +829,7 @@ from .orf import (
     ORFOE1IE,
     ORFIPTVIE,
 )
+from .outsidetv import OutsideTVIE
 from .packtpub import (
     PacktPubIE,
     PacktPubCourseIE,
@@ -861,6 +858,7 @@ from .piksel import PikselIE
 from .pinkbike import PinkbikeIE
 from .pladform import PladformIE
 from .playfm import PlayFMIE
+from .playplustv import PlayPlusTVIE
 from .plays import PlaysTVIE
 from .playtvak import PlaytvakIE
 from .playvid import PlayvidIE
