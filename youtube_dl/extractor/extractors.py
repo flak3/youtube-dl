@@ -619,6 +619,7 @@ from .mailru import (
     MailRuMusicSearchIE,
 )
 from .makertv import MakerTVIE
+from .malltv import MallTVIE
 from .mangomolo import (
     MangomoloVideoIE,
     MangomoloLiveIE,
@@ -692,7 +693,10 @@ from .myvi import (
     MyviEmbedIE,
 )
 from .myvidster import MyVidsterIE
-from .nationalgeographic import NationalGeographicVideoIE
+from .nationalgeographic import (
+    NationalGeographicVideoIE,
+    NationalGeographicTVIE,
+)
 from .naver import NaverIE
 from .nba import NBAIE
 from .nbc import (
@@ -1055,7 +1059,10 @@ from .southpark import (
     SouthParkEsIE,
     SouthParkNlIE
 )
-from .spankbang import SpankBangIE
+from .spankbang import (
+    SpankBangIE,
+    SpankBangPlaylistIE,
+)
 from .spankwire import SpankwireIE
 from .spiegel import SpiegelIE, SpiegelArticleIE
 from .spiegeltv import SpiegeltvIE
@@ -1164,6 +1171,7 @@ from .toutv import TouTvIE
 from .toypics import ToypicsUserIE, ToypicsIE
 from .traileraddict import TrailerAddictIE
 from .trilulilu import TriluliluIE
+from .trunews import TruNewsIE
 from .trutv import TruTVIE
 from .tube8 import Tube8IE
 from .tubitv import TubiTvIE
@@ -1359,7 +1367,6 @@ from .voxmedia import (
     VoxMediaVolumeIE,
     VoxMediaIE,
 )
-from .vporn import VpornIE
 from .vrt import VRTIE
 from .vrak import VrakIE
 from .vrv import (
@@ -1497,6 +1504,7 @@ from .zattoo import (
     QuantumTVIE,
     QuicklineIE,
     QuicklineLiveIE,
+    SaltTVIE,
     SAKTVIE,
     VTXTVIE,
     WalyTVIE,
