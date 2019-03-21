@@ -44,9 +44,7 @@
  - **AmericasTestKitchen**
  - **anderetijden**: npo.nl, ntr.nl, omroepwnl.nl, zapp.nl and npo3.nl
  - **AnimeOnDemand**
- - **anitube.se**
  - **Anvato**
- - **AnySex**
  - **APA**
  - **Aparat**
  - **AppleConnect**
@@ -458,6 +456,7 @@
  - **LineTV**
  - **linkedin:learning**
  - **linkedin:learning:course**
+ - **LinuxAcademy**
  - **LiTV**
  - **LiveLeak**
  - **LiveLeakEmbed**
@@ -697,7 +696,6 @@
  - **PornoXO**
  - **PornTube**
  - **PressTV**
- - **PrimeShareTV**
  - **PromptFile**
  - **prosiebensat1**: ProSiebenSat.1 Digital
  - **puhutv**
@@ -717,7 +715,7 @@
  - **radio.de**
  - **radiobremen**
  - **radiocanada**
- - **RadioCanadaAudioVideo**
+ - **radiocanada:audiovideo**
  - **radiofrance**
  - **RadioJavan**
  - **Rai**
@@ -764,7 +762,6 @@
  - **RTVS**
  - **Rudo**
  - **RUHD**
- - **RulePorn**
  - **rutube**: Rutube videos
  - **rutube:channel**: Rutube channels
  - **rutube:embed**: Rutube embedded videos
@@ -915,6 +912,7 @@
  - **ToypicsUser**: Toypics user profile
  - **TrailerAddict** (Currently broken)
  - **Trilulilu**
+ - **TruNews**
  - **TruTV**
  - **Tube8**
  - **TubiTv**
@@ -1008,7 +1006,6 @@
  - **video.mit.edu**
  - **VideoDetective**
  - **videofy.me**
- - **VideoMega**
  - **videomore**
  - **videomore:season**
  - **videomore:video**
@@ -1125,6 +1122,7 @@
  - **yandexmusic:album**: Яндекс.Музыка - Альбом
  - **yandexmusic:playlist**: Яндекс.Музыка - Плейлист
  - **yandexmusic:track**: Яндекс.Музыка - Трек
+ - **YandexVideo**
  - **YapFiles**
  - **YesJapan**
  - **yinyuetai:video**: 音悦Tai
