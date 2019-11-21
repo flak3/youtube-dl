@@ -32,7 +32,8 @@ def _media_xml_tag(tag):
 
 class MTVServicesInfoExtractor(InfoExtractor):
     _MOBILE_TEMPLATE = None
-    _LANG = None
+    _DEFAULT_LANG = None
+    _LANGS = []
 
     @staticmethod
     def _id_from_uri(uri):
@@ -68,7 +69,7 @@ class MTVServicesInfoExtractor(InfoExtractor):
         url = re.sub(r'.+pxE=mp4', 'http://mtvnmobile.vo.llnwd.net/kip0/_pxn=0+_pxK=18639+_pxE=mp4', url, 1)
         return [{'url': url, 'ext': 'mp4'}]
 
-    def _extract_video_formats(self, mdoc, mtvn_id, video_id):
+    def _extract_video_formats(self, mdoc, mtvn_id, video_id, lang=None):
         if re.match(r'.*/(error_country_block\.swf|geoblock\.mp4|copyright_error\.flv(?:\?geo\b.+?)?)$', mdoc.find('.//src').text) is not None:
             if mtvn_id is not None and self._MOBILE_TEMPLATE is not None:
                 self.to_screen('The normal version is not available from your '
@@ -83,7 +84,8 @@ class MTVServicesInfoExtractor(InfoExtractor):
                 hls_url = rendition.find('./src').text
                 formats.extend(self._extract_m3u8_formats(
                     hls_url, video_id, ext='mp4', entry_protocol='m3u8_native',
-                    m3u8_id='hls', fatal=False))
+                    m3u8_id='-'.join(filter(None, [lang, 'hls'])), language=lang,
+                    preferred_language=self._DEFAULT_LANG, live=True, fatal=False))
             else:
                 # fms
                 try:
@@ -99,10 +101,12 @@ class MTVServicesInfoExtractor(InfoExtractor):
                         'ext': 'flv' if rtmp_video_url.startswith('rtmp') else ext,
                         'url': rtmp_video_url,
                         'format_id': '-'.join(filter(None, [
+                            lang,
                             'rtmp' if rtmp_video_url.startswith('rtmp') else None,
                             rendition.get('bitrate')])),
                         'width': int(rendition.get('width')),
                         'height': int(rendition.get('height')),
+                        'language': lang,
                     }])
                 except (KeyError, TypeError):
                     raise ExtractorError('Invalid rendition field.')
@@ -129,7 +133,7 @@ class MTVServicesInfoExtractor(InfoExtractor):
                 })
         return subtitles
 
-    def _get_video_info(self, itemdoc, use_hls=True):
+    def _get_video_info(self, itemdoc, use_hls=True, lang=None):
         uri = itemdoc.find('guid').text
         video_id = self._id_from_uri(uri)
         self.report_extraction(video_id)
@@ -183,7 +187,7 @@ class MTVServicesInfoExtractor(InfoExtractor):
         if mtvn_id_node is not None:
             mtvn_id = mtvn_id_node.text
 
-        formats = self._extract_video_formats(mediagen_doc, mtvn_id, video_id)
+        formats = self._extract_video_formats(mediagen_doc, mtvn_id, video_id, lang)
 
         # Some parts of complete video may be missing (e.g. missing Act 3 in
         # http://www.southpark.de/alle-episoden/s14e01-sexual-healing)
@@ -204,18 +208,18 @@ class MTVServicesInfoExtractor(InfoExtractor):
         }
 
     def _get_feed_query(self, uri):
-        data = {'uri': uri}
-        if self._LANG:
-            data['lang'] = self._LANG
-        return data
+        return {'uri': uri}
 
-    def _get_videos_info(self, uri, use_hls=True):
+    def _get_videos_info(self, uri, use_hls=True, lang=None):
         video_id = self._id_from_uri(uri)
         feed_url = self._get_feed_url(uri)
-        info_url = update_url_query(feed_url, self._get_feed_query(uri))
-        return self._get_videos_info_from_url(info_url, video_id, use_hls)
+        feed_query = self._get_feed_query(uri)
+        if lang:
+            feed_query['lang'] = lang
+        info_url = update_url_query(feed_url, feed_query)
+        return self._get_videos_info_from_url(info_url, video_id, use_hls, lang)
 
-    def _get_videos_info_from_url(self, url, video_id, use_hls=True):
+    def _get_videos_info_from_url(self, url, video_id, use_hls=True, lang=None):
         idoc = self._download_xml(
             url, video_id,
             'Downloading info', transform_source=fix_xml_ampersands)
@@ -225,12 +229,11 @@ class MTVServicesInfoExtractor(InfoExtractor):
 
         entries = []
         for item in idoc.findall('.//item'):
-            info = self._get_video_info(item, use_hls)
+            info = self._get_video_info(item, use_hls, lang)
             if info:
                 entries.append(info)
 
-        return self.playlist_result(
-            entries, playlist_title=title, playlist_description=description)
+        return {'entries': entries, 'title': title, 'description': description}
 
     def _extract_triforce_mgid(self, webpage, data_zone=None, video_id=None):
         triforce_feed = self._parse_json(self._search_regex(
@@ -284,7 +287,19 @@ class MTVServicesInfoExtractor(InfoExtractor):
         title = url_basename(url)
         webpage = self._download_webpage(url, title)
         mgid = self._extract_mgid(webpage)
-        videos_info = self._get_videos_info(mgid)
+        videos_by_lang = {}
+        for lang in self._LANGS:
+            videos_by_lang[lang] = self._get_videos_info(mgid, lang=lang)
+        
+        videos_info = self.playlist_result(
+            videos_by_lang[self._DEFAULT_LANG]['entries'],
+            playlist_title=videos_by_lang[self._DEFAULT_LANG]['title'],
+            playlist_description=videos_by_lang[self._DEFAULT_LANG]['description'])
+        del videos_by_lang[self._DEFAULT_LANG]
+        for index, playlist_video in enumerate(videos_info['entries']):
+            for lang_info in videos_by_lang.values():
+                playlist_video['formats'] += lang_info['entries'][index]['formats']
+            self._sort_formats(playlist_video['formats'])
         return videos_info
 
 
