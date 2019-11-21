@@ -29,7 +29,8 @@ class SouthParkIE(MTVServicesInfoExtractor):
 class SouthParkEsIE(SouthParkIE):
     IE_NAME = 'southpark.cc.com:español'
     _VALID_URL = r'https?://(?:www\.)?(?P<url>southpark\.cc\.com/episodios-en-espanol/(?P<id>.+?)(\?|#|$))'
-    _LANG = 'es'
+    _LANGS = ['es','en']
+    _DEFAULT_LANG = 'es'
 
     _TESTS = [{
         'url': 'http://southpark.cc.com/episodios-en-espanol/s01e01-cartman-consigue-una-sonda-anal#source=351c1323-0b96-402d-a8b9-40d01b2e9bde&position=1&sort=!airdate',
@@ -46,6 +47,8 @@ class SouthParkDeIE(SouthParkIE):
     IE_NAME = 'southpark.de'
     _VALID_URL = r'https?://(?:www\.)?(?P<url>southpark\.de/(?:clips|alle-episoden|collections)/(?P<id>.+?)(\?|#|$))'
     _FEED_URL = 'http://www.southpark.de/feeds/video-player/mrss/'
+    _LANGS = ['de','en']
+    _DEFAULT_LANG = 'de'
 
     _TESTS = [{
         'url': 'http://www.southpark.de/clips/uygssh/the-government-wont-respect-my-privacy#tab=featured',
