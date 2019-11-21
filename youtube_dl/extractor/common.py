@@ -1586,8 +1586,9 @@ class InfoExtractor(object):
     def _extract_m3u8_formats(self, m3u8_url, video_id, ext=None,
                               entry_protocol='m3u8', preference=None,
                               m3u8_id=None, note=None, errnote=None,
-                              fatal=True, live=False, data=None, headers={},
-                              query={}):
+                              fatal=True, live=False, language=None,
+                              preferred_language=None, data=None,
+                              headers={}, query={}):
         res = self._download_webpage_handle(
             m3u8_url, video_id,
             note=note or 'Downloading m3u8 information',
@@ -1602,11 +1603,13 @@ class InfoExtractor(object):
 
         return self._parse_m3u8_formats(
             m3u8_doc, m3u8_url, ext=ext, entry_protocol=entry_protocol,
-            preference=preference, m3u8_id=m3u8_id, live=live)
+            preference=preference, m3u8_id=m3u8_id, live=live,
+            language=language, preferred_language=preferred_language)
 
     def _parse_m3u8_formats(self, m3u8_doc, m3u8_url, ext=None,
                             entry_protocol='m3u8', preference=None,
-                            m3u8_id=None, live=False):
+                            m3u8_id=None, live=False, language=None,
+                            preferred_language=None):
         if '#EXT-X-FAXS-CM:' in m3u8_doc:  # Adobe Flash Access
             return []
 
@@ -1667,7 +1670,10 @@ class InfoExtractor(object):
                     'format_id': '-'.join(format_id),
                     'url': format_url(media_url),
                     'manifest_url': m3u8_url,
-                    'language': media.get('LANGUAGE'),
+                    'language': media.get('LANGUAGE') or language,
+                    'language_preference': (10 if media.get('LANGUAGE') == preferred_language
+                                            or language == preferred_language else -10)
+                                            if preferred_language else None,
                     'ext': ext,
                     'protocol': entry_protocol,
                     'preference': preference,
@@ -1729,7 +1735,8 @@ class InfoExtractor(object):
                     'ext': ext,
                     'fps': float_or_none(last_stream_inf.get('FRAME-RATE')),
                     'protocol': entry_protocol,
-                    'preference': preference,
+                    'language': language,
+                    'language_preference': (10 if language == preferred_language else -10) if preferred_language else None,
                 }
                 resolution = last_stream_inf.get('RESOLUTION')
                 if resolution:
