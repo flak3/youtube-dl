@@ -1072,7 +1072,7 @@ class YoutubeDL(object):
                 '*=': lambda attr, value: value in attr,
             }
             str_operator_rex = re.compile(r'''(?x)
-                \s*(?P<key>ext|acodec|vcodec|container|protocol|format_id)
+                \s*(?P<key>ext|acodec|vcodec|container|protocol|format_id|language)
                 \s*(?P<negation>!\s*)?(?P<op>%s)(?P<none_inclusive>\s*\?)?
                 \s*(?P<value>[a-zA-Z0-9._-]+)
                 \s*$
@@ -1339,6 +1339,7 @@ class YoutubeDL(object):
                         'acodec': formats_info[1].get('acodec'),
                         'abr': formats_info[1].get('abr'),
                         'ext': output_ext,
+                        'language': formats_info[1].get('language'),
                     }
                 video_selector, audio_selector = map(_build_selector_function, selector.selector)
 
